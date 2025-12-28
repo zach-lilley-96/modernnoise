@@ -27,6 +27,6 @@ public class AudioDbController {
 
     @GetMapping("/albums/{artistName}")
     public List<ArtistDto> getAlbumsByArtistName(@PathVariable String artistName) throws Exception {
-        throw new Exception("Not implemented yet");
+        return audioDbService.GetArtistData(artistName);
     }
 }

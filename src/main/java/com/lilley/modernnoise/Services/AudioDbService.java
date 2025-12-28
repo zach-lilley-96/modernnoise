@@ -1,5 +1,6 @@
 package com.lilley.modernnoise.Services;
 
+import com.lilley.modernnoise.Data.Dtos.AlbumDto;
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.RestClients.impl.AudioDbRestClient;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,9 @@ public class AudioDbService {
 
     public List<ArtistDto> GetArtistData(String artistName) {
         return client.FetchArtistData(artistName);
+    }
+
+    public List<AlbumDto> GetAlbumsByArtist(String artistName) {
+        return client.FetchAlbumsByArtist(artistName);
     }
 }
