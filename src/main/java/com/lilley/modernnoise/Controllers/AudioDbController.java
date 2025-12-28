@@ -1,5 +1,6 @@
 package com.lilley.modernnoise.Controllers;
 
+import com.lilley.modernnoise.Data.Dtos.AlbumDto;
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.RestClients.impl.AudioDbRestClient;
 import com.lilley.modernnoise.Services.AudioDbService;
@@ -26,7 +27,7 @@ public class AudioDbController {
     }
 
     @GetMapping("/albums/{artistName}")
-    public List<ArtistDto> getAlbumsByArtistName(@PathVariable String artistName) throws Exception {
-        return audioDbService.GetArtistData(artistName);
+    public List<AlbumDto> getAlbumsByArtistName(@PathVariable String artistName) {
+        return audioDbService.GetAlbumsByArtist(artistName);
     }
 }

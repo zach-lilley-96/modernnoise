@@ -40,12 +40,11 @@ public class AudioDbRestClient {
                         .queryParam("s", artistName)
                         .build())
                 .retrieve().body(AlbumSearchResponse.class);
-
-        if (response == null || response.albums() == null || response.albums().isEmpty()) {
+        if (response == null || response.album() == null || response.album().isEmpty()) {
             return null;
         }
 
-        return response.albums();
+        return response.album();
     }
 
 
