@@ -1,7 +1,10 @@
 package com.lilley.modernnoise.Services;
 
+import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.RestClients.impl.AudioDbRestClient;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AudioDbService {
@@ -11,13 +14,7 @@ public class AudioDbService {
         this.client = client;
     }
 
-    public void GetArtistData(String artistName) {
-        String extension = "123/search.php";
-        var response = client.get()
-                .uri(uri -> uri.path(extension)
-                        .queryParam("s", artistName)
-                        .build())
-                .retrieve().body(String.class);
-        System.out.println(response);
+    public List<ArtistDto> GetArtistData(String artistName) {
+        return client.FetchArtistData(artistName);
     }
 }
