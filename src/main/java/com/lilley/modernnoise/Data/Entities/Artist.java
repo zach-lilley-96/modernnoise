@@ -1,9 +1,12 @@
 package com.lilley.modernnoise.Data.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,5 +37,9 @@ public class Artist {
 
     @Column(updatable = false)
     private int formedYear;
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Album> albums = new ArrayList<>();
 
 }

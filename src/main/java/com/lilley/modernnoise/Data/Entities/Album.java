@@ -1,5 +1,6 @@
 package com.lilley.modernnoise.Data.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -34,4 +35,9 @@ public class Album {
 
     @Column(unique = true, updatable = false)
     private String audioDbId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "artist_id", nullable = false)
+    @JsonBackReference
+    private Artist artist;
 }
