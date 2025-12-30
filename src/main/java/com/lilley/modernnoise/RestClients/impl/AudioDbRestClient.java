@@ -4,7 +4,6 @@ import com.lilley.modernnoise.Data.Dtos.AlbumDto;
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Data.Dtos.ResponseDtos.AlbumSearchResponse;
 import com.lilley.modernnoise.Data.Dtos.ResponseDtos.ArtistSearchResponse;
-import com.lilley.modernnoise.Data.Entities.Artist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
