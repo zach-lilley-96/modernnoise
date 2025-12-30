@@ -15,6 +15,7 @@ public class ArtistMapper {
                 .genre(dto.strGenre())
                 .thumbnailUrl(dto.strArtistThumb())
                 .formedYear(dto.intFormedYear())
+                .audioDbId(dto.strMusicBrainzID())
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class ArtistMapper {
                 artist.getName(),
                 artist.getGenre(),
                 artist.getThumbnailUrl(),
+                artist.getAudioDbId(),
                 artist.getFormedYear()
         );
     }

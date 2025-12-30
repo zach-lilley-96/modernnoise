@@ -13,16 +13,19 @@ public class AlbumMapper {
                 album.getTitle(),
                 album.getReleaseYear(),
                 album.getThumbnailUrl(),
-                album.getArtistName()
+                album.getArtistName(),
+                album.getAudioDbId()
         );
     }
 
     public static Album toEntity(AlbumDto dto){
-        Album album = new Album();
-        album.setTitle(dto.strAlbum());
-        album.setReleaseYear(dto.intYearReleased());
-        album.setThumbnailUrl(dto.strAlbumThumb());
-        album.setArtistName(dto.strArtist());
-        return album;
+        return Album.builder()
+                .artistName(dto.strArtist())
+                .audioDbId(dto.strMusicBrainzID())
+                .releaseYear(dto.intYearReleased())
+                .thumbnailUrl(dto.strAlbumThumb())
+                .title(dto.strAlbum())
+                .build();
+
     }
 }
