@@ -7,14 +7,14 @@ import lombok.*;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Artist {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotBlank
@@ -33,6 +33,6 @@ public class Artist {
     private String audioDbId;
 
     @Column(updatable = false)
-    private int formedYear = 9999;
+    private int formedYear;
 
 }
