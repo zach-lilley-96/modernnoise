@@ -1,4 +1,4 @@
-package com.lilley.modernnoise.Data.Dtos.ResponseDtos;
+package com.lilley.modernnoise.Data.Dtos.AudioDb;
 
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 
