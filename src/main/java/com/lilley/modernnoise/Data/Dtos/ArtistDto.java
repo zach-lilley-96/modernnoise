@@ -7,6 +7,7 @@ public record ArtistDto(
         String strArtist,
         String strGenre,
         String strArtistThumb,
+        String strMusicBrainzID,
         int intFormedYear
 ) {
 }

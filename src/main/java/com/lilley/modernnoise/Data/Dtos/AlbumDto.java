@@ -7,5 +7,6 @@ public record AlbumDto(
         String strAlbum,
         String intYearReleased,
         String strAlbumThumb,
-        String strArtist
+        String strArtist,
+        String strMusicBrainzID
 ) {}
