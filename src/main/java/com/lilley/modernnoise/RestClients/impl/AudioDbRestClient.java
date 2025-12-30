@@ -5,18 +5,16 @@ import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Data.Dtos.ResponseDtos.AlbumSearchResponse;
 import com.lilley.modernnoise.Data.Dtos.ResponseDtos.ArtistSearchResponse;
 import com.lilley.modernnoise.Data.Entities.Artist;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class AudioDbRestClient {
     private final RestClient restClient;
-
-    public AudioDbRestClient(RestClient restClient) {
-        this.restClient = restClient;
-    }
 
     public List<ArtistDto> FetchArtistData(String artistName) {
         String extension = "123/search.php";
