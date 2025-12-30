@@ -19,10 +19,10 @@ public class AlbumMapper {
 
     public static Album toEntity(AlbumDto dto){
         Album album = new Album();
-        album.setTitle(dto.strAlbumStripped());
+        album.setTitle(dto.strAlbum());
         album.setReleaseYear(dto.intYearReleased());
         album.setThumbnailUrl(dto.strAlbumThumb());
-        album.setArtistName(dto.strArtistStripped());
+        album.setArtistName(dto.strArtist());
         return album;
     }
 }
