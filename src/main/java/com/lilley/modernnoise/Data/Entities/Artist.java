@@ -1,9 +1,6 @@
 package com.lilley.modernnoise.Data.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -31,6 +28,9 @@ public class Artist {
     @NotBlank
     @Column(length = 1000)
     private String thumbnailUrl;
+
+    @Column(unique = true, updatable = false)
+    private String audioDbId;
 
     @Column(updatable = false)
     private int formedYear = 9999;

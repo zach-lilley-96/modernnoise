@@ -34,4 +34,7 @@ public class Album {
 
     @Column(nullable = true)
     private String thumbnailUrl;
+
+    @Column(unique = true, updatable = false)
+    private String audioDbId;
 }
