@@ -1,0 +1,60 @@
+package com.lilley.modernnoise.Services;
+
+import com.lilley.modernnoise.Data.Dtos.AlbumDto;
+import com.lilley.modernnoise.Data.Dtos.ArtistDto;
+import com.lilley.modernnoise.Mappers.AlbumMapper;
+import com.lilley.modernnoise.Mappers.ArtistMapper;
+import com.lilley.modernnoise.Repos.ArtistRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ArtistService {
+    private final ArtistRepo artistRepo;
+
+    public boolean artistExistsByName(String artistName) {
+        return artistRepo.existsByName(artistName);
+    }
+
+    public boolean artistExistsByAudioDbId(String audioDbId) {
+        return artistRepo.existsByAudioDbId(audioDbId);
+    }
+
+    public ArtistDto getArtistByName(String artistName) {
+        var artist = artistRepo.findByName(artistName);
+        return artist != null ? ArtistMapper.toDto(artist) : null;
+    }
+
+    public ArtistDto createArtist(ArtistDto artistDto) {
+        var artist = ArtistMapper.toEntity(artistDto);
+        var savedArtist = artistRepo.save(artist);
+        return ArtistMapper.toDto(savedArtist);
+    }
+
+    public List<AlbumDto> getAlbumsByMusicBrainzId(String audioDbId) {
+        var artist = artistRepo.findAll().stream()
+                .filter(a -> audioDbId.equals(a.getAudioDbId()))
+                .findFirst()
+                .orElse(null);
+        if (artist == null) {
+            return List.of();
+        }
+        return artist.getAlbums().stream()
+                .map(AlbumMapper::toDto)
+                .toList();
+    }
+
+    public List<AlbumDto> getAlbumsByArtistId(java.util.UUID artistId) {
+        var artist = artistRepo.findById(artistId).orElse(null);
+        if (artist == null) {
+            return List.of();
+        }
+        return artist.getAlbums().stream()
+                .map(AlbumMapper::toDto)
+                .toList();
+    }
+
+}
