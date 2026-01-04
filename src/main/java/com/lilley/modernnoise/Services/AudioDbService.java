@@ -12,9 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AudioDbService {
     private final AudioDbRestClient client;
+    private final ArtistPersistenceService artistPersistenceService;
 
     public List<ArtistDto> GetArtistData(String artistName) {
-        return client.FetchArtistData(artistName);
+        var artists = client.FetchArtistData(artistName);
+        artists.forEach(
+                artistPersistenceService::persistArtistDataAsync
+        );
+        return artists;
     }
 
     public List<AlbumDto> GetAlbumsByArtist(String artistName) {

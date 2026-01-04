@@ -29,15 +29,15 @@ public class ArtistService {
         return artist.map(ArtistMapper::toDto).orElse(null);
     }
 
-    public ArtistDto createArtist(ArtistDto artistDto) {
-        var artistExists = artistExistsByAudioDbId(artistDto.strMusicBrainzID());
-        if (artistExists) {
-            return ArtistMapper.toDto(artistRepo.findByAudioDbId(artistDto.strMusicBrainzID()));
-        }
-        var artist = ArtistMapper.toEntity(artistDto);
-        var savedArtist = artistRepo.save(artist);
-        return ArtistMapper.toDto(savedArtist);
-    }
+//    public ArtistDto createArtist(ArtistDto artistDto) {
+//        var artistExists = artistExistsByAudioDbId(artistDto.strMusicBrainzID());
+//        if (artistExists) {
+//            return ArtistMapper.toDto(artistRepo.findByAudioDbId(artistDto.strMusicBrainzID()));
+//        }
+//        var artist = ArtistMapper.toEntity(artistDto);
+//        var savedArtist = artistRepo.save(artist);
+//        return ArtistMapper.toDto(savedArtist);
+//    }
 
     public List<AlbumDto> getAlbumsByMusicBrainzId(String audioDbId) {
         var artist = artistRepo.findByAudioDbId(audioDbId);
@@ -50,14 +50,14 @@ public class ArtistService {
                 .toList();
     }
 
-    public List<AlbumDto> getAlbumsByArtistId(UUID artistId) {
-        var artist = artistRepo.findById(artistId).orElse(null);
-        if (artist == null) {
-            return List.of();
-        }
-        return artist.getAlbums().stream()
-                .map(AlbumMapper::toDto)
-                .toList();
-    }
+//    public List<AlbumDto> getAlbumsByArtistId(UUID artistId) {
+//        var artist = artistRepo.findById(artistId).orElse(null);
+//        if (artist == null) {
+//            return List.of();
+//        }
+//        return artist.getAlbums().stream()
+//                .map(AlbumMapper::toDto)
+//                .toList();
+//    }
 
 }

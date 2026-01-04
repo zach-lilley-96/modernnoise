@@ -26,11 +26,14 @@ public class ArtistPersistenceService {
             return;
         }
         Artist newArtist = ArtistMapper.toEntity(artistDto);
+        var albums = audioDbRestClient.FetchAlbumsByArtist(artistDto.strArtist());
+        if (albums.isEmpty()){
+            throw new IllegalStateException("No albums found for artist: " + artistDto.strArtist());
+        }
+        albums.stream()
+                .map(AlbumMapper::toEntity)
+                .forEach(newArtist::addAlbum);
         artistRepo.save(newArtist);
 
-        var albums = audioDbRestClient.FetchAlbumsByArtist(artistDto.strArtist());
-        if (albums != null){
-            albums.forEach(a -> albumRepo.save(AlbumMapper.toEntity(a)));
-        }
     }
 }
