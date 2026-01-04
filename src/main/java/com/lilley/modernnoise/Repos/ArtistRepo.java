@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface ArtistRepo extends JpaRepository<Artist, UUID> {
     Artist findByName(@NotNull String name);
+    Artist findByAudioDbId(@NotNull String audioDbId);
     boolean existsByAudioDbId(@NotNull String audioDbId);
     boolean existsByName(@NotNull String name);
+
 }
