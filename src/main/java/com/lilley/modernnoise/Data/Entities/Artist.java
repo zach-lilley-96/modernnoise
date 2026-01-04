@@ -42,4 +42,5 @@ public class Artist {
     @JsonManagedReference
     private List<Album> albums = new ArrayList<>();
 
+
 }
