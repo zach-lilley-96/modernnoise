@@ -3,7 +3,6 @@ package com.lilley.modernnoise.Services;
 import com.lilley.modernnoise.Data.Dtos.AlbumDto;
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.RestClients.impl.AudioDbRestClient;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
