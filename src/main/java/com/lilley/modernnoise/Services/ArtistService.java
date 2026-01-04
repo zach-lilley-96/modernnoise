@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,25 +30,27 @@ public class ArtistService {
     }
 
     public ArtistDto createArtist(ArtistDto artistDto) {
+        var artistExists = artistExistsByAudioDbId(artistDto.strMusicBrainzID());
+        if (artistExists) {
+            return ArtistMapper.toDto(artistRepo.findByAudioDbId(artistDto.strMusicBrainzID()));
+        }
         var artist = ArtistMapper.toEntity(artistDto);
         var savedArtist = artistRepo.save(artist);
         return ArtistMapper.toDto(savedArtist);
     }
 
     public List<AlbumDto> getAlbumsByMusicBrainzId(String audioDbId) {
-        var artist = artistRepo.findAll().stream()
-                .filter(a -> audioDbId.equals(a.getAudioDbId()))
-                .findFirst()
-                .orElse(null);
+        var artist = artistRepo.findByAudioDbId(audioDbId);
         if (artist == null) {
             return List.of();
         }
+
         return artist.getAlbums().stream()
                 .map(AlbumMapper::toDto)
                 .toList();
     }
 
-    public List<AlbumDto> getAlbumsByArtistId(java.util.UUID artistId) {
+    public List<AlbumDto> getAlbumsByArtistId(UUID artistId) {
         var artist = artistRepo.findById(artistId).orElse(null);
         if (artist == null) {
             return List.of();
