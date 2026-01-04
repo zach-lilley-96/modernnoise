@@ -25,8 +25,8 @@ public class ArtistService {
     }
 
     public ArtistDto getArtistByName(String artistName) {
-        var artist = artistRepo.findByName(artistName);
-        return artist != null ? ArtistMapper.toDto(artist) : null;
+        var artist = artistRepo.findByNameIgnoreCase(artistName);
+        return artist.map(ArtistMapper::toDto).orElse(null);
     }
 
     public ArtistDto createArtist(ArtistDto artistDto) {
