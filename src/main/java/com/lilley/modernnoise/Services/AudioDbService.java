@@ -16,6 +16,9 @@ public class AudioDbService {
 
     public List<ArtistDto> GetArtistData(String artistName) {
         var artists = client.FetchArtistData(artistName);
+        if (artists == null || artists.isEmpty()) {
+            return List.of();
+        }
         artists.forEach(
                 artistPersistenceService::persistArtistDataAsync
         );
