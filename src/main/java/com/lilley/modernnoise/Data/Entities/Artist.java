@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,6 +40,9 @@ public class Artist {
     @JsonManagedReference
     @Builder.Default
     private List<Album> albums = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "savedArtists")
+    private Set<User> savedByUsers = new HashSet<>();
 
     public void addAlbum(Album album) {
         albums.add(album);
