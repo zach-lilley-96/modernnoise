@@ -4,7 +4,6 @@ import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Data.Entities.Artist;
 import com.lilley.modernnoise.Mappers.AlbumMapper;
 import com.lilley.modernnoise.Mappers.ArtistMapper;
-import com.lilley.modernnoise.Repos.AlbumRepo;
 import com.lilley.modernnoise.Repos.ArtistRepo;
 import com.lilley.modernnoise.RestClients.impl.AudioDbRestClient;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ArtistPersistenceService {
     private final ArtistRepo artistRepo;
-    private final AlbumRepo albumRepo;
     private final AudioDbRestClient audioDbRestClient;
 
     @Async
@@ -31,9 +29,18 @@ public class ArtistPersistenceService {
             throw new IllegalStateException("No albums found for artist: " + artistDto.strArtist());
         }
         albums.stream()
+                .filter(album -> isNotStandardLP(album.strAlbum()))
                 .map(AlbumMapper::toEntity)
                 .forEach(newArtist::addAlbum);
         artistRepo.save(newArtist);
 
+    }
+
+    private boolean isNotStandardLP(String albumName){
+        return !albumName.toLowerCase().contains("best of")
+                && !albumName.toLowerCase().contains("live")
+                && !albumName.toLowerCase().contains("single")
+                && !albumName.toLowerCase().contains("remix")
+                && !albumName.toLowerCase().contains("remaster");
     }
 }
