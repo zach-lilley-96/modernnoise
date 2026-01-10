@@ -8,6 +8,7 @@ import com.lilley.modernnoise.Repos.ArtistRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,17 +48,8 @@ public class ArtistService {
 
         return artist.getAlbums().stream()
                 .map(AlbumMapper::toDto)
+                .sorted(Comparator.comparing(AlbumDto::intYearReleased))
                 .toList();
     }
-
-//    public List<AlbumDto> getAlbumsByArtistId(UUID artistId) {
-//        var artist = artistRepo.findById(artistId).orElse(null);
-//        if (artist == null) {
-//            return List.of();
-//        }
-//        return artist.getAlbums().stream()
-//                .map(AlbumMapper::toDto)
-//                .toList();
-//    }
 
 }
