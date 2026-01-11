@@ -30,26 +30,6 @@ public class ArtistService {
         return artist.map(ArtistMapper::toDto).orElse(null);
     }
 
-//    public ArtistDto createArtist(ArtistDto artistDto) {
-//        var artistExists = artistExistsByAudioDbId(artistDto.strMusicBrainzID());
-//        if (artistExists) {
-//            return ArtistMapper.toDto(artistRepo.findByAudioDbId(artistDto.strMusicBrainzID()));
-//        }
-//        var artist = ArtistMapper.toEntity(artistDto);
-//        var savedArtist = artistRepo.save(artist);
-//        return ArtistMapper.toDto(savedArtist);
-//    }
 
-    public List<AlbumDto> getAlbumsByMusicBrainzId(String audioDbId) {
-        var artist = artistRepo.findByAudioDbId(audioDbId);
-        if (artist == null) {
-            return List.of();
-        }
-
-        return artist.getAlbums().stream()
-                .map(AlbumMapper::toDto)
-                .sorted(Comparator.comparing(AlbumDto::intYearReleased))
-                .toList();
-    }
 
 }
