@@ -2,14 +2,15 @@ package com.lilley.modernnoise.Mappers;
 
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Data.Entities.Artist;
+import org.jspecify.annotations.NonNull;
 
-public class ArtistMapper {
+public class ArtistMapper{
 
     private ArtistMapper() {
 
     }
 
-    public static Artist toEntity(ArtistDto dto){
+    public static Artist toEntity(@NonNull ArtistDto dto){
         return Artist.builder()
                 .name(dto.strArtist())
                 .genre(dto.strGenre())
@@ -19,7 +20,7 @@ public class ArtistMapper {
                 .build();
     }
 
-    public static ArtistDto toDto(Artist artist){
+    public static ArtistDto toDto(@NonNull Artist artist){
         return new ArtistDto(
                 artist.getName(),
                 artist.getGenre(),
@@ -28,4 +29,5 @@ public class ArtistMapper {
                 artist.getFormedYear()
         );
     }
+
 }
