@@ -5,6 +5,7 @@ import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Mappers.AlbumMapper;
 import com.lilley.modernnoise.Mappers.ArtistMapper;
 import com.lilley.modernnoise.Repos.ArtistRepo;
+import com.lilley.modernnoise.Services.Interfaces.IArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ArtistService {
+public class ArtistService implements IArtistService {
     private final ArtistRepo artistRepo;
 
     public boolean artistExistsByName(String artistName) {
