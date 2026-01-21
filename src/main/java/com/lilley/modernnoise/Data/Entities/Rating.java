@@ -34,10 +34,17 @@ public class Rating {
     @Column(nullable = false)
     @jakarta.validation.constraints.Min(1)
     @jakarta.validation.constraints.Max(10)
-    private int score; // 1–10
+    private float score; // 1–10
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
