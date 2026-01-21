@@ -24,6 +24,9 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     private final OAuthUserService userService;
     private final JwtService jwtService;
 
+    @Value("${app.redirect-url}")
+    private String redirectUrl;
+
     @Override
     public void onAuthenticationSuccess(@NonNull HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuthUser = (OAuth2User) authentication.getPrincipal();
@@ -40,6 +43,6 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect(redirectUrl);
     }
 }
