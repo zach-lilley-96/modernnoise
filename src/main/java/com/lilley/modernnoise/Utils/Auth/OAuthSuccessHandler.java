@@ -36,10 +36,10 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
-                .secure(false) // true in prod (HTTPS)
+                .secure(true) // true in prod (HTTPS)
                 .path("/")
                 .maxAge(Duration.ofHours(6))
-                .sameSite("Lax")
+                .sameSite("None")
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
