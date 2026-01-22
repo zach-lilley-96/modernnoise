@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
-                                .requestMatchers("/*").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
