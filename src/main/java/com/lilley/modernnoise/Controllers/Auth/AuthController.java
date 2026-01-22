@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@CrossOrigin(origins = "https://modernnoise-ui.vercel.app", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @Slf4j
 @RequestMapping("auth")
