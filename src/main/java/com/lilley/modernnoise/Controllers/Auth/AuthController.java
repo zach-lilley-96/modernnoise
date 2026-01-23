@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @Slf4j
 @RequestMapping("auth")
@@ -38,8 +37,10 @@ public class AuthController {
         log.info("Logging out user");
         ResponseCookie cookie = ResponseCookie.from("jwt", "")
                 .httpOnly(true)
+                .secure(false) // or match your environment like in the success handler
                 .path("/")
                 .maxAge(0)
+                .sameSite("Lax") // or "None" in prod; must match what was used when set
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
