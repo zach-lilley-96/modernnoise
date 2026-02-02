@@ -40,8 +40,7 @@ public class User {
 
     private String displayName;
 
-    @Column(unique = true, nullable = false)
-    @Builder.Default
+    @Column(unique = true)
     private UUID friendCode = UUID.randomUUID();
 
     @Column(nullable = false)
