@@ -14,21 +14,21 @@ services:
       timeout: 5s
       retries: 5
 
-  app:
-    build: .
-    container_name: modernnoise-app
-    ports:
-      - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/modernnoise
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
-      MUSIC_API_URL: ${MUSIC_API_URL:-https://www.theaudiodb.com/api/v1/json/1}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy-client-id}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy-client-secret}
-      JWT_SECRET: ${JWT_SECRET:-dummy-jwt-secret-at-least-32-characters-long}
+#  app:
+#    build: .
+#    container_name: modernnoise-app
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/modernnoise
+#      SPRING_DATASOURCE_USERNAME: user
+#      SPRING_DATASOURCE_PASSWORD: password
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+#      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+#      MUSIC_API_URL: ${MUSIC_API_URL:-https://www.theaudiodb.com/api/v1/json/1}
+#      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy-client-id}
+#      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy-client-secret}
+#      JWT_SECRET: ${JWT_SECRET:-dummy-jwt-secret-at-least-32-characters-long}
