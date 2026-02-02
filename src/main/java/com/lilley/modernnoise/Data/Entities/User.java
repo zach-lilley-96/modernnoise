@@ -1,9 +1,26 @@
 package com.lilley.modernnoise.Data.Entities;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
-import java.util.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -13,6 +30,7 @@ import java.util.*;
 @Builder
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue
     private UUID id;
@@ -22,10 +40,15 @@ public class User {
 
     private String displayName;
 
+    @Column(unique = true, nullable = false)
+    @Builder.Default
+    private UUID friendCode = UUID.randomUUID();
+
     @Column(nullable = false)
     private String provider;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Rating> ratings = new ArrayList<>();
 
     @ManyToMany
@@ -34,7 +57,16 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
+    @Builder.Default
     private Set<Artist> savedArtists = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    @Builder.Default
+    private Set<User> friendSet = new HashSet<>();
 
 }
