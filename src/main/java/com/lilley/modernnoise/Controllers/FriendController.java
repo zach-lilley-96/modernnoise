@@ -1,7 +1,12 @@
 package com.lilley.modernnoise.Controllers;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.lilley.modernnoise.Data.Dtos.FriendDto;
+import com.lilley.modernnoise.Data.Dtos.Requests.FriendSearchDto;
+import com.lilley.modernnoise.Data.Dtos.Response.SuccessfulFriendCodeResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +22,7 @@ import com.lilley.modernnoise.Services.FriendService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@Slf4j
 @RequestMapping("/friends")
 @RequiredArgsConstructor
 public class FriendController {
@@ -34,25 +40,27 @@ public class FriendController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> GetFriends(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(friendService.GetFriends(user));
+    public ResponseEntity<List<FriendDto>> GetFriends(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(friendService.GetFriends(user.getId()));
     }
 
     @PostMapping("/search")
-    public ResponseEntity<?> SearchForUserByFriendCode(@RequestBody String friendCode) {
-        return ResponseEntity.ok(friendService.GetUsernameByFriendCode(UUID.fromString(friendCode)));
+    public ResponseEntity<SuccessfulFriendCodeResponse> SearchForUserByFriendCode(@RequestBody FriendSearchDto friendRequest) {
+        log.info("Searching for user by friend code: {}", friendRequest.friendCode());
+        return ResponseEntity.ok(friendService.GetUsernameByFriendCode(UUID.fromString(friendRequest.friendCode())));
     }
 
     @PostMapping
-    public ResponseEntity<?> AddFriend(@AuthenticationPrincipal User user, @RequestBody String friendCode) {
-        var friendCodeUUID = UUID.fromString(friendCode);
-        friendService.AddFriend(user, friendCodeUUID);
+    public ResponseEntity<?> AddFriend(@AuthenticationPrincipal User user, @RequestBody FriendSearchDto friendRequest) {
+        log.info("Adding friend {} to user {}", friendRequest.friendCode(), user.getEmail());
+        var friendCodeUUID = UUID.fromString(friendRequest.friendCode());
+        friendService.AddFriend(user.getId(), friendCodeUUID);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<?> RemoveFriend(@AuthenticationPrincipal User user, @RequestBody String friendCode) {
-        var friendCodeUUID = UUID.fromString(friendCode);
+    public ResponseEntity<?> RemoveFriend(@AuthenticationPrincipal User user, @RequestBody FriendSearchDto friendRequest) {
+        var friendCodeUUID = UUID.fromString(friendRequest.friendCode());
         friendService.RemoveFriend(user, friendCodeUUID);
         return ResponseEntity.ok().build();
     }
