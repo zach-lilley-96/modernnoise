@@ -42,6 +42,7 @@ public class Artist {
     private List<Album> albums = new ArrayList<>();
 
     @ManyToMany(mappedBy = "savedArtists")
+    @Builder.Default
     private Set<User> savedByUsers = new HashSet<>();
 
     public void addAlbum(Album album) {
