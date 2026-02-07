@@ -44,6 +44,7 @@ public class Album {
     private Artist artist;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Rating> ratings = new ArrayList<>();
 
 }
