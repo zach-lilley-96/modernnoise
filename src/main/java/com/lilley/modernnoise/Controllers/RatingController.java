@@ -57,6 +57,19 @@ public class RatingController {
         return ratings;
     }
 
+    @GetMapping("/friend-ratings/{audioDbId}")
+    public List<RatingResponseDto> getFriendRatingsForArtist(
+            @AuthenticationPrincipal User user,
+            @PathVariable String audioDbId,
+            @RequestParam String friendCode
+    ) {
+        var friendUser = friendService.GetUserByFriendCode(UUID.fromString(friendCode));
+        log.info("Fetching ratings for artist {} by friend of user {}", audioDbId, user.getEmail());
+        var ratings = ratingService.getRatingsByUserAndArtist(friendUser, audioDbId);
+        log.info("Found {} ratings for artist {} by friend of user {}", ratings.size(), audioDbId, user.getEmail());
+        return ratings;
+    }
+
     @PostMapping("/save")
     public ResponseEntity<?> postRating(@AuthenticationPrincipal User user, @RequestBody PostRatingRequest request) {
         log.info("Received rating request for user {} with {} ratings", user.getEmail(), request.ratings().size());
