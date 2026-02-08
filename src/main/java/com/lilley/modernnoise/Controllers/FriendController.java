@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.lilley.modernnoise.Data.Dtos.FriendDto;
 import com.lilley.modernnoise.Data.Dtos.Requests.FriendSearchDto;
+import com.lilley.modernnoise.Data.Dtos.Response.FriendCodeResponse;
 import com.lilley.modernnoise.Data.Dtos.Response.SuccessfulFriendCodeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class FriendController {
     }
 
     @GetMapping("/generate")
-    public ResponseEntity<UUID> GenerateFriendCode(@AuthenticationPrincipal User user) {
+    public ResponseEntity<FriendCodeResponse> GenerateFriendCode(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(friendService.GenerateFriendCode(user));
     }
 
