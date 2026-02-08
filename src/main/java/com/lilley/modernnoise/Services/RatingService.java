@@ -131,4 +131,5 @@ public class RatingService implements IRatingService {
     public Page<ArtistDto> findArtistsRatedByUser(User user, Pageable pageable) {
         return ratingRepo.findDistinctArtistsRatedByUser(user, pageable).map(ArtistMapper::toDto);
     }
+
 }

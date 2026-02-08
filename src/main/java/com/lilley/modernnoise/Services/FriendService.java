@@ -1,12 +1,12 @@
 package com.lilley.modernnoise.Services;
 
 import com.lilley.modernnoise.Data.Dtos.FriendDto;
+import com.lilley.modernnoise.Data.Dtos.Response.FriendCodeResponse;
 import com.lilley.modernnoise.Data.Dtos.Response.SuccessfulFriendCodeResponse;
 import com.lilley.modernnoise.Data.Entities.User;
 import com.lilley.modernnoise.Repos.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,14 @@ public class FriendService {
         var friendOpt = userRepo.findByFriendCode(friendCode).orElseThrow(() -> new IllegalArgumentException("Friend not found"));
 
         var user = userRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        var userFriendCode = user.getFriendCode();
+        if (userFriendCode == null){
+            user.setFriendCode(UUID.randomUUID());
+        }
+
+        if (userFriendCode == friendCode){
+            return;
+        }
 
         var friendSet = user.getFriendSet();
         if (friendSet.contains(friendOpt)){
@@ -59,16 +67,16 @@ public class FriendService {
     }
 
     @Transactional
-    public UUID GenerateFriendCode(User user){
+    public FriendCodeResponse GenerateFriendCode(User user){
         if(user.getFriendCode() != null){
-            return user.getFriendCode();
+            return new FriendCodeResponse(user.getFriendCode());
         }
         var newFriendCode =  UUID.randomUUID();
 
         user.setFriendCode(newFriendCode);
         userRepo.save(user);
 
-        return newFriendCode;
+        return new FriendCodeResponse(newFriendCode);
     }
 
     @Transactional
@@ -83,5 +91,8 @@ public class FriendService {
 
     public UUID GetFriendCode(User user){
         return user.getFriendCode();
+    }
+    public User GetUserByFriendCode(UUID friendCode){
+        return userRepo.findByFriendCode(friendCode).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }
