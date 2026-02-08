@@ -37,6 +37,7 @@ public class Rating {
     private float score; // 1–10
 
     @Column(nullable = false, updatable = false)
+    @Builder.Default
     private Instant createdAt = Instant.now();
 
     @PrePersist
