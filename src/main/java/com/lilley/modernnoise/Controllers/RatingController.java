@@ -4,6 +4,7 @@ import com.lilley.modernnoise.Data.Dtos.ArtistDto;
 import com.lilley.modernnoise.Data.Dtos.Requests.PostRatingRequest;
 import com.lilley.modernnoise.Data.Dtos.Response.RatingResponseDto;
 import com.lilley.modernnoise.Data.Entities.User;
+import com.lilley.modernnoise.Services.FriendService;
 import com.lilley.modernnoise.Services.RatingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -21,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RatingController {
     private final RatingService ratingService;
+    private final FriendService friendService;
 
     @GetMapping("/artists")
     public Page<ArtistDto> getArtistsRatedByUser(
@@ -32,6 +35,18 @@ public class RatingController {
         var artists = ratingService.findArtistsRatedByUser(user, PageRequest.of(page, size));
         log.info("Found {} artists rated by user: {}", artists.getTotalElements(), user.getEmail());
         return artists;
+    }
+
+    @GetMapping("/friend")
+    public Page<ArtistDto> getArtistsRatedByFriend(
+            @AuthenticationPrincipal User user,
+            @RequestParam String friendCode,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size
+    ) {
+        var friendUser = friendService.GetUserByFriendCode(UUID.fromString(friendCode));
+        log.info("Fetching artists rated by friend of user: {} (page: {}, size: {})", user.getEmail(), page, size);
+        return ratingService.findArtistsRatedByUser(friendUser, PageRequest.of(page, size));
     }
 
     @GetMapping("/my-ratings/{audioDbId}")
