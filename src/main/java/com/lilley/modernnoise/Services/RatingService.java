@@ -114,6 +114,7 @@ public class RatingService implements IRatingService {
                             .orElseThrow(() -> new RuntimeException("Album not found for rating"));
                     return new RatingResponseDto(
                             albumDto,
+                            user.getDisplayName(),
                             ratingDto.score()
                     );
                 })
