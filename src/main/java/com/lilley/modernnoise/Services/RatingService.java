@@ -133,4 +133,12 @@ public class RatingService implements IRatingService {
         return ratingRepo.findDistinctArtistsRatedByUser(user, pageable).map(ArtistMapper::toDto);
     }
 
+    @Override
+    public Page<ArtistDto> searchUserSavedArtists(User user, String searchTerm, Pageable pageable) {
+        if (searchTerm.isBlank()) {
+            return Page.empty();
+        }
+        return ratingRepo.searchUserSavedArtists( user, searchTerm, pageable).map(ArtistMapper::toDto);
+    }
+
 }

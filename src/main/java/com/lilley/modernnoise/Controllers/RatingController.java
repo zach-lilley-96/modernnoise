@@ -78,4 +78,18 @@ public class RatingController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/search-artist")
+    public Page<ArtistDto> searchUserSavedArtists(
+            @AuthenticationPrincipal User user,
+            @RequestParam String searchTerm,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size
+    ) {
+        log.info("Searching for artists saved by user {} with search term '{}'", user.getEmail(), searchTerm);
+        if (searchTerm.isBlank()) {
+            return Page.empty();
+        }
+        return ratingService.searchUserSavedArtists(user, searchTerm, PageRequest.of(page, size));
+    }
+
 }

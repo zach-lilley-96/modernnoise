@@ -23,9 +23,9 @@ public interface RatingRepo extends JpaRepository<Rating, UUID> {
        AND r.album.audioDbId IN :albumIds
        """)
     Optional<List<Rating>> findByUserAndAlbumIds(User user, List<String> albumIds);
-    boolean existsByUserAndAlbum(User user, Album album);
-
-    List<Rating> findByUser(User user);
+//    boolean existsByUserAndAlbum(User user, Album album);
+//
+//    List<Rating> findByUser(User user);
 
     @Query(value = """
                 SELECT DISTINCT a.artist
@@ -43,4 +43,7 @@ public interface RatingRepo extends JpaRepository<Rating, UUID> {
 
     @Query("SELECT r FROM Rating r WHERE r.user = ?1 AND r.album.artist.audioDbId = ?2")
     List<Rating> findByUserAndArtistAudioDbId(User user, String audioDbId);
+
+    @Query("SELECT DISTINCT a.artist FROM Rating r JOIN r.album a WHERE r.user = :user AND LOWER(a.artist.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    Page<Artist> searchUserSavedArtists(User user, String searchTerm, Pageable pageable);
 }
