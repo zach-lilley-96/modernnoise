@@ -1,7 +1,7 @@
 
 # Modern Noise
 
-Modern noise is Spring powered web application for music enthusiasts like myself. My friends and I are always talking about our favorite albums and where they rank in an artists discography. Modern Noise is my way or bringing that discussion virtually. Users can search for their favorite artists and give scores to their albums. The goal is to have a social media-lite application for people to share these rankings with their friends and introduce people to new music.
+Modern noise is Spring powered web application for music enthusiasts like myself. My friends and I are always talking about our favorite albums and where they rank in an artists discography. Modern Noise is my way or bringing that discussion online with a visual guide. Users can search for their favorite artists and give scores to their albums. The goal is to have a social media-lite application for people to share these rankings with their friends and introduce people to new music.
 
 # Thank you
 
