@@ -14,9 +14,15 @@ None of this would be possible without the work of TheAudioDB, so I would like t
 - Frontend: React w/ Typescript
 - Host: Render
 
+# Recent Additions
+
+- Add friends with friend code system (will likely be revamped in 2026)
+- Ability to see friends rankings
+- Email notifications for registration
+  
 # Roadmap 2026
 
-- Friend feature using friend codes
-- Compare ratings with friends
+- Notifications when friends update rankings
+- Compare ratings directly with friends
 - Global average rating for albums
 - Trending / Highly rated page 
