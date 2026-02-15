@@ -38,7 +38,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
                 .httpOnly(true)
                 .secure(true) // true in prod (HTTPS)
                 .path("/")
-                .maxAge(Duration.ofHours(6))
+                .maxAge(Duration.ofHours(24))
                 .sameSite("None")
                 .build();
 
