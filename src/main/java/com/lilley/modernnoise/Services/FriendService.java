@@ -50,7 +50,8 @@ public class FriendService {
     }
 
     @Transactional
-    public void RemoveFriend(User user, UUID friendCode){
+    public void RemoveFriend(UUID userId, UUID friendCode){
+        var user = userRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         var friendOpt = userRepo.findByFriendCode(friendCode);
 
         if(friendOpt.isEmpty()){
