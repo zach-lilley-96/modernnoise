@@ -62,7 +62,7 @@ public class FriendController {
     @DeleteMapping
     public ResponseEntity<?> RemoveFriend(@AuthenticationPrincipal User user, @RequestBody FriendSearchDto friendRequest) {
         var friendCodeUUID = UUID.fromString(friendRequest.friendCode());
-        friendService.RemoveFriend(user, friendCodeUUID);
+        friendService.RemoveFriend(user.getId(), friendCodeUUID);
         return ResponseEntity.ok().build();
     }
 }
