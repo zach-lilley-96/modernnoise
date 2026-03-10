@@ -46,4 +46,7 @@ public interface RatingRepo extends JpaRepository<Rating, UUID> {
 
     @Query("SELECT DISTINCT a.artist FROM Rating r JOIN r.album a WHERE r.user = :user AND LOWER(a.artist.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     Page<Artist> searchUserSavedArtists(User user, String searchTerm, Pageable pageable);
+
+    @Query("SELECT COUNT(r) > 0 FROM Rating r WHERE r.user = :user AND r.album.artist = :artist")
+    boolean existsByUserAndArtist(User user, Artist artist);
 }

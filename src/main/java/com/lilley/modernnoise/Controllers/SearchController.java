@@ -19,13 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchController {
     private final AudioDbService audioDbService;
-    private final ArtistService artistService;
     private final AlbumService albumService;
 
     @GetMapping("/artist/{artistName}")
     public List<ArtistDto> searchArtistByName(@PathVariable String artistName) {
         log.info("Searching for artist: {}", artistName);
         var artists = audioDbService.GetArtistData(artistName);
+        if (artists.isEmpty()) {
+            return List.of();
+        }
         log.info("Found {} artists for search term: {}", artists.size(), artistName);
         return artists;
     }

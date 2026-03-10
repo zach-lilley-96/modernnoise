@@ -1,24 +1,28 @@
 package com.lilley.modernnoise.Services;
 
 import com.lilley.modernnoise.Data.Dtos.ArtistDto;
+import com.lilley.modernnoise.Data.Dtos.Mail.EmailDetails;
+import com.lilley.modernnoise.Data.Dtos.Mail.MailType;
 import com.lilley.modernnoise.Data.Dtos.RatingDto;
 import com.lilley.modernnoise.Data.Dtos.Response.RatingResponseDto;
+import com.lilley.modernnoise.Data.Entities.Album;
+import com.lilley.modernnoise.Data.Entities.Artist;
 import com.lilley.modernnoise.Data.Entities.Rating;
 import com.lilley.modernnoise.Data.Entities.User;
 import com.lilley.modernnoise.Mappers.ArtistMapper;
 import com.lilley.modernnoise.Mappers.RatingMapper;
 import com.lilley.modernnoise.Repos.RatingRepo;
 import com.lilley.modernnoise.Services.Interfaces.IRatingService;
+import com.lilley.modernnoise.Services.Interfaces.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +30,10 @@ import java.util.Optional;
 public class RatingService implements IRatingService {
     private final RatingRepo ratingRepo;
     private final AlbumService albumService;
+    private final MailService mailService;
 
+    @Override
+    @Transactional
     public Optional<RatingDto> rateAlbum(User user, String albumMusicBrainzId, int score) {
         log.info("User {} rating album {} with score {}", user.getEmail(), albumMusicBrainzId, score);
         validateScore(score);
@@ -35,7 +42,8 @@ public class RatingService implements IRatingService {
             log.warn("Album {} not found for rating by user {}", albumMusicBrainzId, user.getEmail());
             return Optional.empty();
         }
-        Optional<Rating> existingRating = ratingRepo.findByUserAndAlbum(user, albumExists.get());
+        Album album = albumExists.get();
+        Optional<Rating> existingRating = ratingRepo.findByUserAndAlbum(user, album);
 
         if (existingRating.isPresent()) {
             Rating rating = existingRating.get();
@@ -45,17 +53,44 @@ public class RatingService implements IRatingService {
             return Optional.of(RatingMapper.toDto(rating));
         } else {
             log.info("Creating new rating for user {} and album {} with score {}", user.getEmail(), albumMusicBrainzId, score);
+
+            boolean isNewArtist = !ratingRepo.existsByUserAndArtist(user, album.getArtist());
+
             Rating newRating =
                     Rating.builder()
                             .user(user)
-                            .album(albumExists.get())
+                            .album(album)
                             .score(score)
                             .build();
             ratingRepo.save(newRating);
+
+            if (isNewArtist) {
+                notifyFriendsOfNewArtist(user, album.getArtist());
+            }
+
             return Optional.of(RatingMapper.toDto(newRating));
         }
     }
 
+    private void notifyFriendsOfNewArtist(User user, Artist artist) {
+        Set<User> friends = user.getFriendSet();
+        if (friends == null || friends.isEmpty()) {
+            log.debug("User {} has no friends to notify about new artist {}", user.getEmail(), artist.getName());
+            return;
+        }
+
+        log.info("Notifying {} friends of user {} about new artist {}", friends.size(), user.getEmail(), artist.getName());
+        for (User friend : friends) {
+            String subject = String.format("%s just rated a new artist!", user.getDisplayName());
+            String body = String.format("Your friend %s just rated a new artist: %s! Check out what they think of it.",
+                                        user.getDisplayName(), artist.getName());
+            EmailDetails email = new EmailDetails(friend.getEmail(), subject, body, MailType.NOTIFICATION);
+            mailService.sendEmail(email);
+        }
+    }
+
+    @Override
+    @Transactional
     public void saveRatingsInBulk(User user, List<RatingDto> newRatings) {
         log.info("Saving {} ratings in bulk for user {}", newRatings.size(), user.getEmail());
         var albumIds = newRatings.stream()
@@ -68,9 +103,10 @@ public class RatingService implements IRatingService {
         });
 
         var ratingsMap = existingRatings.stream()
-                .collect(java.util.stream.Collectors.toMap(r -> r.getAlbum().getAudioDbId(), r -> r));
+                .collect(Collectors.toMap(r -> r.getAlbum().getAudioDbId(), r -> r));
 
-        List<Rating> ratings = new ArrayList<>();
+        List<Rating> ratingsToSave = new ArrayList<>();
+        Set<Artist> newArtistsRated = new HashSet<>();
 
         for (RatingDto ratingDto : newRatings) {
             Rating rating;
@@ -90,12 +126,20 @@ public class RatingService implements IRatingService {
                         .album(album)
                         .score(ratingDto.score())
                         .build();
+
+                if (!ratingRepo.existsByUserAndArtist(user, album.getArtist())) {
+                    newArtistsRated.add(album.getArtist());
+                }
             }
-            ratings.add(rating);
+            ratingsToSave.add(rating);
         }
 
-        ratingRepo.saveAll(ratings);
-        log.info("Successfully saved {} ratings in bulk for user {}", ratings.size(), user.getEmail());
+        ratingRepo.saveAll(ratingsToSave);
+        log.info("Successfully saved {} ratings in bulk for user {}", ratingsToSave.size(), user.getEmail());
+
+        for (Artist artist : newArtistsRated) {
+            notifyFriendsOfNewArtist(user, artist);
+        }
     }
 
     @Override
